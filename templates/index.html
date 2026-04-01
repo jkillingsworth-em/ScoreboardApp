@@ -1,67 +1,638 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Scoreboard LED Lookup</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light p-5">
-    <div class="container bg-white shadow p-4 rounded" style="max-width: 900px;">
-        <h2 class="text-primary mb-4">LED Board Configuration Tool</h2>
-        
-        <div class="row">
-            <div class="col-md-5">
-                <label class="form-label fw-bold">Select Scoreboard Model:</label>
-                <select id="modelPicker" class="form-select mb-4" onchange="loadModel()">
-                    <option value="">-- Choose One --</option>
-                    {% for model in models %}<option value="{{ model }}">{{ model }}</option>{% endfor %}
-                </select>
-                
-                <div class="text-center border p-2 rounded">
-                    <p class="text-muted small">Model Preview</p>
-                    <img id="scoreImg" src="" class="img-fluid rounded" style="display:none; max-height: 250px;">
-                    <div id="noImg" class="py-5 bg-light text-muted">Select a model to see image</div>
-                </div>
-            </div>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scoreboard Configuration Dashboard | Electro-Mech</title>
 
-            <div class="col-md-7">
-                <table class="table table-striped border">
-                    <thead class="table-dark">
-                        <tr><th>Board Type</th><th>Size (in)</th><th>Quantity</th></tr>
-                    </thead>
-                    <tbody id="dataTable">
-                        <tr><td colspan="3" class="text-center">Select a model to see data</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+  <!-- Google Fonts: Montserrat for a bold, industrial look -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap 5 for responsive layout and UI components -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    /* ── Global Reset & Typography ────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #F4F4F4;   /* light grey dashboard background */
+      color: #222;
+      margin: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6,
+    .section-label {
+      text-transform: uppercase;   /* bold, industrial all-caps headings */
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Top Navigation Bar ───────────────────────────────────────── */
+    .navbar-em {
+      background-color: #dd2f2a;   /* Electro-Mech Red */
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+
+    .navbar-em .brand-name {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .navbar-em .brand-sub {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .navbar-em .divider {
+      width: 1px;
+      height: 36px;
+      background: rgba(255,255,255,0.3);
+    }
+
+    .navbar-em .page-title {
+      color: #FFB81C;              /* Gold accent for the page title */
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── Main Content Wrapper ─────────────────────────────────────── */
+    .dashboard-wrapper {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ── Search Bar ───────────────────────────────────────────────── */
+    .search-wrapper {
+      margin-bottom: 1.75rem;
+    }
+
+    .search-wrapper label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.35rem;
+      display: block;
+    }
+
+    /* The visible text input inside the searchable dropdown */
+    #model-search {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 0.6rem 1rem;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.9rem;
+      width: 100%;
+      max-width: 420px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #model-search:focus {
+      border-color: #dd2f2a;
+      box-shadow: 0 0 0 3px rgba(221,47,42,0.12);
+    }
+
+    /* Dropdown list that appears below the search input */
+    #model-dropdown {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+      max-width: 420px;
+      max-height: 240px;
+      overflow-y: auto;
+      display: none;           /* hidden until the user types */
+      position: absolute;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    #model-dropdown li {
+      padding: 0.55rem 1rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.15s;
+    }
+
+    #model-dropdown li:last-child { border-bottom: none; }
+
+    #model-dropdown li:hover,
+    #model-dropdown li.active {
+      background-color: #fef0ef;
+      color: #dd2f2a;
+      font-weight: 600;
+    }
+
+    /* ── Card: Gold Top-Border Accent ─────────────────────────────── */
+    .em-card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-top: 4px solid #FFB81C;  /* Gold accent top border */
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+
+    .em-card .card-header-em {
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .card-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .card-header-copy {
+      min-width: 0;
+    }
+
+    .em-card .card-header-em .card-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0;
+    }
+
+    .em-card .card-header-em .card-model-name {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #dd2f2a;
+      margin: 0.15rem 0 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Model Image ──────────────────────────────────────────────── */
+    .model-image-wrap {
+      padding: 1.25rem;
+      text-align: center;
+      background: #fafafa;
+    }
+
+    #model-image {
+      max-width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      border-radius: 3px;
+    }
+
+    /* ── Placeholder shown before a model is selected ─────────────── */
+    .no-selection-msg {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #aaa;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Data Table ───────────────────────────────────────────────── */
+    .table-em thead tr {
+      background-color: #dd2f2a;   /* Electro-Mech Red header */
+      color: #fff;
+    }
+
+    .table-em thead th {
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      border: none;
+      padding: 0.75rem 1rem;
+      white-space: nowrap;
+    }
+
+    .table-em tbody tr {
+      background: #fff;
+      transition: background 0.15s;
+    }
+
+    .table-em tbody tr:hover {
+      background-color: #fef7f7;   /* subtle red-tinted hover */
+    }
+
+    .table-em tbody td {
+      font-size: 0.85rem;
+      padding: 0.65rem 1rem;
+      vertical-align: middle;
+      border-color: #f0f0f0;
+    }
+
+    .matrix-size-badge {
+      display: none;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      text-align: right;
+    }
+
+    .matrix-size-label {
+      color: #555;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .matrix-size-value {
+      color: #FFB81C;
+      font-weight: 800;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 767.98px) {
+      .card-header-row {
+        flex-direction: column;
+      }
+
+      .matrix-size-badge {
+        justify-content: flex-start;
+        text-align: left;
+      }
+    }
+
+    /* ── Primary Button ───────────────────────────────────────────── */
+    .btn-em {
+      background-color: #dd2f2a;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem 1.25rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-em:hover  { background-color: #b82522; }
+    .btn-em:active { transform: scale(0.97); }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Navigation Bar ──────────────────────────────────────────── -->
+  <nav class="navbar-em">
+    <div>
+      <div class="brand-name">Electro-Mech</div>
+      <div class="brand-sub">Scoreboard Co.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="page-title">Scoreboard Configuration Dashboard</div>
+  </nav>
+
+  <!-- ── Main Dashboard ─────────────────────────────────────────── -->
+  <div class="dashboard-wrapper">
+
+    <!-- Search / Model Selector -->
+    <div class="search-wrapper" style="position: relative;">
+      <label for="model-search">Select a Scoreboard Model</label>
+      <input
+        type="text"
+        id="model-search"
+        placeholder="Type to search models…"
+        autocomplete="off"
+      />
+      <!-- Filtered list rendered dynamically by JavaScript -->
+      <ul id="model-dropdown"></ul>
     </div>
 
-    <script>
-    async function loadModel() {
-        const model = document.getElementById('modelPicker').value;
-        if (!model) return;
+    <!-- Two-column layout: Image card (left) + Data table (right) -->
+    <div class="row g-4">
 
-        // 1. Show the Image from Electro-Mech
-        const img = document.getElementById('scoreImg');
-        const noImg = document.getElementById('noImg');
-        img.src = `https://www.electro-mech.com/wp-content/uploads/${model}.png`;
-        img.style.display = 'block';
-        noImg.style.display = 'none';
+      <!-- Left Column: Model Image Card -->
+      <div class="col-lg-4">
+        <div class="em-card h-100">
+          <div class="card-header-em">
+            <div class="card-title">Model Preview</div>
+            <!-- Filled in by JS when a model is selected -->
+            <div class="card-model-name" id="preview-model-name">—</div>
+          </div>
 
-        // 2. Fetch the LED board data from our Python "Waiter"
-        const response = await fetch(`/api/${model}`);
-        const data = await response.json();
+          <!-- Image shown once a model is selected -->
+          <div class="model-image-wrap" id="image-wrap" style="display:none;">
+            <div id="image-loading" style="font-weight:700; color:#666; margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:0.06em;">
+              Loading...
+            </div>
+            <img id="model-image" src="" alt="Scoreboard model image" />
+            <!-- 'View on Official Site' button — href set dynamically by JS -->
+            <div style="margin-top:1rem;">
+              <a id="official-site-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn-em" style="display:inline-block; text-decoration:none;">
+                View on Official Site
+              </a>
+            </div>
+          </div>
 
-        // 3. Update the table on the page
-        document.getElementById('dataTable').innerHTML = data.map(item => `
-            <tr>
-                <td class="text-uppercase">${item.pcbType}</td>
-                <td>${item.pcbSize}"</td>
-                <td class="fw-bold text-primary">${item.count}</td>
-            </tr>
-        `).join('');
+          <!-- Placeholder shown before any selection -->
+          <div class="no-selection-msg" id="image-placeholder">
+            Select a model to preview
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: PCB Data Table Card -->
+      <div class="col-lg-8">
+        <div class="em-card h-100">
+          <div class="card-header-em">
+            <div class="card-header-row">
+              <div class="card-header-copy">
+                <div class="card-title">Digits Per Model</div>
+                <div class="card-model-name" id="table-model-name">—</div>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0.35rem;">
+                <div class="matrix-size-badge" id="matrix-size-badge">
+                  <span class="matrix-size-label">ETN Matrix Size</span>
+                  <span class="matrix-size-value" id="matrix-size-value">—</span>
+                </div>
+                <div class="matrix-size-badge" id="panel-rows-badge">
+                  <span class="matrix-size-label">Panel Rows</span>
+                  <span class="matrix-size-value" id="panel-rows-value">—</span>
+                </div>
+                <div class="matrix-size-badge" id="etn-count-badge">
+                  <span class="matrix-size-label">ETN Boards</span>
+                  <span class="matrix-size-value" id="etn-count-value">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Table placeholder (before selection) -->
+          <div class="no-selection-msg" id="table-placeholder">
+            Select a model to load configuration data
+          </div>
+
+          <!-- Actual table (hidden until data loads) -->
+          <div id="table-wrap" style="display:none; overflow-x:auto;">
+            <table class="table table-bordered table-em mb-0">
+              <thead id="table-head"></thead>
+              <tbody id="table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /row -->
+  </div><!-- /dashboard-wrapper -->
+
+  <!-- Bootstrap 5 JS bundle (includes Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ── Data injected by Flask (Jinja2 template) ──────────────────
+    // 'models' is the list of unique model names passed from app.py.
+    const ALL_MODELS = {{ models | tojson }};
+
+    // ── DOM references ────────────────────────────────────────────
+    const searchInput      = document.getElementById('model-search');
+    const dropdown         = document.getElementById('model-dropdown');
+    const previewModelName = document.getElementById('preview-model-name');
+    const tableModelName   = document.getElementById('table-model-name');
+    const modelImage       = document.getElementById('model-image');
+    const imageLoading     = document.getElementById('image-loading');
+    const officialSiteBtn  = document.getElementById('official-site-btn');
+    const imageWrap        = document.getElementById('image-wrap');
+    const imagePlaceholder = document.getElementById('image-placeholder');
+    const tablePlaceholder = document.getElementById('table-placeholder');
+    const tableWrap        = document.getElementById('table-wrap');
+    const tableHead        = document.getElementById('table-head');
+    const tableBody        = document.getElementById('table-body');
+    const matrixSizeBadge  = document.getElementById('matrix-size-badge');
+    const matrixSizeValue  = document.getElementById('matrix-size-value');
+    const panelRowsBadge   = document.getElementById('panel-rows-badge');
+    const panelRowsValue   = document.getElementById('panel-rows-value');
+    const etnCountBadge    = document.getElementById('etn-count-badge');
+    const etnCountValue    = document.getElementById('etn-count-value');
+
+    // ── Searchable Dropdown ───────────────────────────────────────
+
+    // Render the dropdown list filtered by the current search term.
+    function renderDropdown(filter) {
+      const term = filter.toLowerCase().trim();
+
+      // Show all models when the box is empty, otherwise filter by search term.
+      const matches = term === ''
+        ? ALL_MODELS
+        : ALL_MODELS.filter(m => m.toLowerCase().includes(term));
+
+      dropdown.innerHTML = '';   // clear previous results
+
+      if (matches.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'No models found';
+        li.style.color = '#aaa';
+        li.style.cursor = 'default';
+        dropdown.appendChild(li);
+      } else {
+        matches.forEach(model => {
+          const li = document.createElement('li');
+          li.textContent = model;
+          // When the user clicks a result, load that model's data.
+          li.addEventListener('mousedown', () => selectModel(model));
+          dropdown.appendChild(li);
+        });
+      }
+
+      dropdown.style.display = 'block';
     }
-    </script>
+
+    // Show the dropdown when the user focuses the search box.
+    searchInput.addEventListener('focus', () => renderDropdown(searchInput.value));
+
+    // Re-filter the list as the user types.
+    searchInput.addEventListener('input', () => renderDropdown(searchInput.value));
+
+    // Hide the dropdown when the user clicks elsewhere on the page.
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.search-wrapper')) {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    // ── Model Selection & Data Loading ────────────────────────────
+
+    // Called when a model is chosen from the dropdown.
+    function selectModel(modelName) {
+      // Update the search box to show the selected model name.
+      searchInput.value = modelName;
+      dropdown.style.display = 'none';
+
+      // Update the heading labels in both cards.
+      previewModelName.textContent = modelName;
+      tableModelName.textContent   = modelName;
+      matrixSizeBadge.style.display = 'none';
+      matrixSizeValue.textContent = '—';
+      panelRowsBadge.style.display = 'none';
+      panelRowsValue.textContent = '—';
+      etnCountBadge.style.display = 'none';
+      etnCountValue.textContent = '—';
+
+      // Build the image URL using the model name and load it.
+      loadModel(modelName);
+
+      // Fetch PCB/LED data for this model from the Flask API.
+      loadTableData(modelName);
+    }
+
+    // ── Image Handling ────────────────────────────────────────────
+    // Primary image source uses the new asset server and lowercased model name.
+    // If that image is missing, we switch to the requested placeholder URL.
+
+    function loadModel(modelName) {
+      const modelLower  = modelName.toLowerCase();
+      const primaryUrl  = `https://assets.electro-mech.com/images/scoreboard-images/${modelLower}.png`;
+      const fallbackUrl = `https://www.google.com/search?q=https://via.placeholder.com/400x300%3Ftext%3D${encodeURIComponent(modelName)}+Image+Not+Found`;
+
+      // Show the image container and hide the 'select a model' placeholder.
+      imageWrap.style.display        = 'block';
+      imagePlaceholder.style.display = 'none';
+      imageLoading.style.display     = 'block';
+      modelImage.style.display       = 'none';
+
+      // Update the 'View on Official Site' button to search for this model.
+      officialSiteBtn.href = `https://www.electro-mech.com/search/?s=${encodeURIComponent(modelLower)}`;
+      officialSiteBtn.target = '_blank';
+
+      // Try the primary asset URL first.
+      modelImage.src = primaryUrl;
+
+      modelImage.onload = () => {
+        imageLoading.style.display = 'none';
+        modelImage.style.display   = 'inline-block';
+      };
+
+      modelImage.onerror = () => {
+        // If the image is not found, switch to the requested placeholder URL.
+        modelImage.src = fallbackUrl;
+        imageLoading.style.display = 'none';
+        modelImage.style.display   = 'inline-block';
+        modelImage.onerror = null;
+      };
+    }
+
+    // ── Table Rendering ───────────────────────────────────────────
+
+    function loadTableData(modelName) {
+      // Call the Flask API route defined in app.py: /api/<model_name>
+      fetch(`/api/${encodeURIComponent(modelName)}`)
+        .then(res => {
+          if (!res.ok) throw new Error('Network response was not ok');
+          return res.json();
+        })
+        .then(rows => {
+          if (!rows || rows.length === 0) {
+            tableWrap.style.display      = 'none';
+            tablePlaceholder.style.display = 'block';
+            tablePlaceholder.textContent   = 'No configuration data found for this model.';
+            matrixSizeBadge.style.display  = 'none';
+            matrixSizeValue.textContent    = '—';
+            panelRowsBadge.style.display   = 'none';
+            panelRowsValue.textContent     = '—';
+            etnCountBadge.style.display    = 'none';
+            etnCountValue.textContent      = '—';
+            return;
+          }
+
+          // If MatrixSize exists, display it as a dedicated summary row instead
+          // of repeating it as a normal table column for every data row.
+          const matrixSize = rows.find(row =>
+            row.MatrixSize !== undefined && row.MatrixSize !== null && `${row.MatrixSize}`.trim() !== ''
+          )?.MatrixSize;
+
+          if (matrixSize) {
+            matrixSizeValue.textContent = matrixSize;
+            matrixSizeBadge.style.display = 'inline-flex';
+          } else {
+            matrixSizeBadge.style.display = 'none';
+            matrixSizeValue.textContent = '—';
+          }
+
+          const panelRows = rows.find(row =>
+            row.PanelRows !== undefined && row.PanelRows !== null && `${row.PanelRows}`.trim() !== ''
+          )?.PanelRows;
+
+          if (panelRows) {
+            panelRowsValue.textContent = panelRows;
+            panelRowsBadge.style.display = 'inline-flex';
+          } else {
+            panelRowsBadge.style.display = 'none';
+            panelRowsValue.textContent = '—';
+          }
+
+          const etnCount = rows.find(row =>
+            row.ETNcount !== undefined && row.ETNcount !== null && `${row.ETNcount}`.trim() !== ''
+          )?.ETNcount;
+
+          if (etnCount) {
+            etnCountValue.textContent = etnCount;
+            etnCountBadge.style.display = 'inline-flex';
+          } else {
+            etnCountBadge.style.display = 'none';
+            etnCountValue.textContent = '—';
+          }
+
+          // Build the table header from the standard data columns only.
+          const excluded = new Set(['MatrixSize', 'ETNcount', 'PanelRows', 'model', '']);
+          const columns = Object.keys(rows[0]).filter(column => !excluded.has(column));
+          tableHead.innerHTML = `<tr>${columns.map(c => `<th>${c}</th>`).join('')}</tr>`;
+
+          // Build the table body — one <tr> per data row from the CSV.
+          const dataRows = rows.map(row =>
+            `<tr>${columns.map(c => `<td>${row[c] ?? '—'}</td>`).join('')}</tr>`
+          ).join('');
+
+          tableBody.innerHTML = dataRows;
+
+          // Show the table and hide the placeholder.
+          tableWrap.style.display        = 'block';
+          tablePlaceholder.style.display = 'none';
+        })
+        .catch(err => {
+          // If the API call fails, show an error message in place of the table.
+          tableWrap.style.display        = 'none';
+          tablePlaceholder.style.display = 'block';
+          tablePlaceholder.textContent   = 'Error loading data. Please try again.';
+          matrixSizeBadge.style.display  = 'none';
+          matrixSizeValue.textContent    = '—';
+          panelRowsBadge.style.display   = 'none';
+          panelRowsValue.textContent     = '—';
+          etnCountBadge.style.display    = 'none';
+          etnCountValue.textContent      = '—';
+          console.error('API error:', err);
+        });
+    }
+  </script>
+
 </body>
 </html>
