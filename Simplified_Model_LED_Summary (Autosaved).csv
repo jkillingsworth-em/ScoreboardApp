@@ -1,4 +1,7 @@
 model,pcbType,pcbSize,count,MatrixSize,PanelRows,ETNcount
+GENERIC,digit,11,48,,,
+GENERIC,misc,4,16,,,
+GENERIC,misc_I,4,32,,,
 LX1020,ball,3,1,,,
 LX1020,digit,11,5,,,
 LX1020,out,3,1,,,
@@ -11,22 +14,8 @@ LX1050,ball,3,1,,,
 LX1050,digit,15,5,,,
 LX1050,out,3,1,,,
 LX1050,strike,3,1,,,
-LX1060,ball,4,1,9 x 32,2P 1R,4
-LX1060,digit,18,5,9 x 32,2P 1R,4
-LX1060,misc,4,2,9 x 32,2P 1R,4
-LX1060,out,4,1,9 x 32,2P 1R,4
-LX1060,strike,4,1,9 x 32,2P 1R,4
-LX1060,ETN,7IN 9x16,4,9 x 32,2P 1R,4
 LX1062,digit,18,2,,,
 LX1064,digit,18,4,,,
-LX1070,ball,4,1,9 x 56,3.5P 1R,6 + 2H
-LX1070,digit,18,5,9 x 56,3.5P 1R,6 + 2H
-LX1070,half,18,1,9 x 56,3.5P 1R,6 + 2H
-LX1070,misc,4,2,9 x 56,3.5P 1R,6 + 2H
-LX1070,out,4,1,9 x 56,3.5P 1R,6 + 2H
-LX1070,strike,4,1,9 x 56,3.5P 1R,6 + 2H
-LX1070,ETN,7IN 9x8,2,9x56,3.5P 1R,6 + 2H
-LX1070,ETN,7IN 9x16,6,9x56,3.5P 1R,6 + 2H
 LX1118,digit,18,2,,,
 LX1118,half,18,1,,,
 LX1130,ball,4,1,,,
@@ -62,6 +51,89 @@ LX1138,digit,11,4,,,
 LX1138,digit,18,5,,,
 LX1138,out,4,1,,,
 LX1138,strike,4,1,,,
+LX1320,SDown1_2,3,1,,,
+LX1320,SDown3_4,3,1,,,
+LX1320,ball,3,1,,,
+LX1320,digit,11,9,,,
+LX1320,strike,3,1,,,
+LX1340,ball,4,1,,,
+LX1340,digit,18,7,,,
+LX1340,misc,4,1,,,
+LX1340,out,4,1,,,
+LX1340,strike,4,1,,,
+LX1341,ball,4,1,,,
+LX1341,digit,18,8,,,
+LX1341,out,4,1,,,
+LX1341,strike,4,1,,,
+LX1360,digit,18,10,,,
+LX1360,down_1_2,4,1,,,
+LX1360,down_3_4,4,1,,,
+LX1360,misc,4,2,,,
+LX1360,misc_F,4,1,,,
+LX1360,misc_G,4,1,,,
+LX1360,qtr_1_2,4,1,,,
+LX2055,digit,6,50,,,
+LX2056,digit,6,72,,,
+LX2160,digit,12,2,,,
+LX2160,misc,4,1,,,
+LX2180,digit,6,4,,,
+LX2180,digit,12,2,,,
+LX2180,misc,4,2,,,
+LX2330,Bposs_<,3,1,,,
+LX2330,Bposs_>,3,1,,,
+LX2330,bonus_C,3,2,,,
+LX2330,bonus_E,3,2,,,
+LX2330,colonDec,9,1,,,
+LX2330,digit,6,1,,,
+LX2330,digit,9,8,,,
+LX2330,half,9,2,,,
+LX3018,digit,18,2,,,
+LX3024,digit,24,2,,,
+LX3030,bottom,30,2,,,
+LX3030,middle,30,2,,,
+LX3050,digit,24,4,,,
+LX3050,digit,15,2,,,
+LX3054,digit,24,4,,,
+LX3054,digit,15,4,,,
+LX3070,bottom,30,4,,,
+LX3070,middle,30,4,,,
+LX3070,top,30,4,,,
+LX3070,digit,15,4,,,
+,top,30,2,,,
+LX3120,digit,11,9,,,
+LX6320,digit,11,9,,,
+LX6324,digit,11,9,,,
+LX7230,bonus,3,2,,,
+LX7230,digit,11,9,,,
+LX7230,half,11,2,,,
+LX7230,poss,3,2,,,
+LX7250,digit,11,9,,,
+LX7250,misc_A,4,2,,,
+LX7250,misc_C,4,2,,,
+LX7260,bonus,3,2,,,
+LX7260,digit,11,14,,,
+LX7260,half,11,4,,,
+LX7260,poss,3,2,,,
+LX7406,digit,6,4,,,
+LX7520,digit,11,6,,,
+LX7620,digit,11,8,,,
+LX7640,digit,18,8,,,
+LX7640,misc,4,1,,,
+LX7860,digit,11,21,,,
+LX1060,ball,4,1,9 x 32,2P 1R,4
+LX1060,digit,18,5,9 x 32,2P 1R,4
+LX1060,misc,4,2,9 x 32,2P 1R,4
+LX1060,out,4,1,9 x 32,2P 1R,4
+LX1060,strike,4,1,9 x 32,2P 1R,4
+LX1060,ETN,7IN 9x16,4,9 x 32,2P 1R,4
+LX1070,ball,4,1,9 x 56,3.5P 1R,6 + 2H
+LX1070,digit,18,5,9 x 56,3.5P 1R,6 + 2H
+LX1070,half,18,1,9 x 56,3.5P 1R,6 + 2H
+LX1070,misc,4,2,9 x 56,3.5P 1R,6 + 2H
+LX1070,out,4,1,9 x 56,3.5P 1R,6 + 2H
+LX1070,strike,4,1,9 x 56,3.5P 1R,6 + 2H
+LX1070,ETN,7IN 9x8,2,9x56,3.5P 1R,6 + 2H
+LX1070,ETN,7IN 9x16,6,9x56,3.5P 1R,6 + 2H
 LX1160,ball,4,1,9 x 32,2P 1R,4
 LX1160,digit,11,4,9 x 32,2P 1R,4
 LX1160,digit,18,5,9 x 32,2P 1R,4
@@ -122,26 +194,6 @@ LX1260,digit,18,4,9 x 48,3P 1R,6
 LX1260,digit,24,4,9 x 48,3P 1R,6
 LX1260,half,18,1,9 x 48,3P 1R,6
 LX1260,misc,4,2,9 x 48,3P 1R,6
-LX1320,SDown1_2,3,1,,,
-LX1320,SDown3_4,3,1,,,
-LX1320,ball,3,1,,,
-LX1320,digit,11,9,,,
-LX1320,strike,3,1,,,
-LX1340,ball,4,1,,,
-LX1340,digit,18,7,,,
-LX1340,misc,4,1,,,
-LX1340,out,4,1,,,
-LX1340,strike,4,1,,,
-LX1341,ball,4,1,,,
-LX1341,digit,18,8,,,
-LX1341,out,4,1,,,
-LX1341,strike,4,1,,,
-LX1360,digit,18,10,,,
-LX1360,down 1-2 or 3-4,4,1,,,
-LX1360,misc,4,2,,,
-LX1360,misc_F,4,1,,,
-LX1360,misc_G,4,1,,,
-LX1360,qtr_1_2,4,1,,,
 LX1370,digit,18,10,9 x 56,3.5P 1R,6 + 2H
 LX1370,half,18,1,9 x 56,3.5P 1R,6 + 2H
 LX1370,misc,4,2,9 x 56,3.5P 1R,6 + 2H
@@ -339,8 +391,8 @@ LX2055,digit,6F GREEN,10,,,
 LX2056,digit,6F RED,24,,,
 LX2056,digit,6F AMBER,24,,,
 LX2056,digit,6F GREEN,24,,,
-LX2106,digit,6F RED,4,,,
 LX2120,digit,12F RED,4,,,
+LX2120,misc,4IN RED,2,,,
 LX2150,digit,12F RED,4,,,
 LX2158,digit,12F RED,4,,,
 LX2160,digit,12F RED,4,,,
@@ -489,19 +541,6 @@ LX2770,digit,12,8,14 x 72,4.5P 2R,8 + 2H
 LX2770,digit,16,8,14 x 72,4.5P 2R,8 + 2H
 LX2770,half,12,2,14 x 72,4.5P 2R,8 + 2H
 LX2770,half,16,2,14 x 72,4.5P 2R,8 + 2H
-LX3018,digit,18,2,,,
-LX3024,digit,24,2,,,
-LX3030,bottom,30,2,,,
-LX3030,middle,30,2,,,
-LX3050,digit,24,4,,,
-LX3050,digit,15,2,,,
-LX3054,digit,24,4,,,
-LX3054,digit,15,4,,,
-LX3070,bottom,30,4,,,
-LX3070,middle,30,4,,,
-LX3070,top,30,4,,,
-LX3070,digit,15,4,,,
-LX3120,digit,11,9,,,
 LX3130,digit,11,9,9 x 40,2.5P 1R,4 + 2H
 LX3140,digit,15,5,9 x 40,2.5P 1R,4 + 2H
 LX3140,digit,18,4,9 x 40,2.5P 1R,4 + 2H
@@ -623,8 +662,6 @@ LX3885,digit,18,2,14 x 112,7P 2R,28
 LX3885,digit,24,6,14 x 112,7P 2R,28
 LX3885,middle,30,9,14 x 112,7P 2R,28
 LX3885,top,30,9,14 x 112,7P 2R,28
-LX6320,digit,11,9,,,
-LX6324,digit,11,9,,,
 LX6360,digit,18,1,9 x 56,3.5P 1R,6 + 2H
 LX6360,digit,24,8,9 x 56,3.5P 1R,6 + 2H
 LX6430,digit,15,5,9 x 64,4P 1R,8
@@ -672,29 +709,10 @@ LX6946,Fposs,10,2,14 x 96,6P 2R,24
 LX6946,digit,15,2,14 x 96,6P 2R,24
 LX6946,digit,18,13,14 x 96,6P 2R,24
 LX6946,digit,24,9,14 x 96,6P 2R,24
-LX6320,digit,11,9,,,
-LX6324,digit,11,9,,,
-LX7230,bonus,3,2,,,
-LX7230,digit,11,9,,,
-LX7230,half,11,2,,,
-LX7230,poss,3,2,,,
-LX7250,digit,11,9,,,
-LX7250,misc_A,4,2,,,
-LX7250,misc_C,4,2,,,
-LX7260,bonus,3,2,,,
-LX7260,digit,11,14,,,
-LX7260,half,11,4,,,
-LX7260,poss,3,2,,,
-LX7406,digit,6,4,,,
-LX7520,digit,11,6,,,
-LX7620,digit,11,8,,,
-LX7640,digit,18,8,,,
-LX7640,misc,4,1,,,
 LX7740,digit,15,21,9 x 56,3.5P 1R,6 + 2H
 LX7740,digit,18,8,9 x 56,3.5P 1R,6 + 2H
 LX7770,digit,18,21,14 x 112,7P 2R,28
 LX7770,digit,24,8,14 x 112,7P 2R,28
-LX7860,digit,11,21,,,
 LX8350,colonDec,12,1,9 x 48,3P 1R,6
 LX8350,digit,9,1,9 x 48,3P 1R,6
 LX8350,digit,12,8,9 x 48,3P 1R,6

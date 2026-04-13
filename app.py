@@ -2,7 +2,7 @@
 # Flask is the web framework that runs our app and handles web requests.
 # render_template sends an HTML page to the browser.
 # jsonify converts Python data into JSON format that web pages can read.
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 
 # pandas is a library for reading and working with spreadsheet/CSV data.
 import pandas as pd
@@ -75,6 +75,31 @@ def get_model_data(model_name):
     # in jsonify so Flask sends back a proper JSON response the browser
     # (and JavaScript on the page) can easily parse.
     return jsonify(model_info.to_dict(orient='records'))
+
+
+# --- Multi-Model Comparison API Route ---
+# Accepts comma-separated model names via the 'models' query parameter.
+# Returns a dict keyed by model name; each value is that model's row list.
+@app.route('/api/compare')
+def compare_models():
+    if 'model' not in df.columns:
+        return jsonify({})
+
+    models_param = request.args.get('models', '')
+    model_names = [m.strip() for m in models_param.split(',') if m.strip()]
+
+    if not model_names:
+        return jsonify({})
+
+    result = {}
+    for model_name in model_names:
+        model_info = df[df['model'] == model_name]
+        model_info = model_info.astype(object).where(pd.notna(model_info), None)
+        model_info = model_info[[c for c in model_info.columns
+                                  if c.strip() != '' and not c.startswith('Unnamed:')]]
+        result[model_name] = model_info.to_dict(orient='records')
+
+    return jsonify(result)
 
 
 # --- Entry Point ---

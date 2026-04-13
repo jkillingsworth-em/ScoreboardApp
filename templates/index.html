@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Scoreboard Configuration Dashboard | Electro-Mech</title>
+  <title>DIGITS PER MODEL | Electro-Mech</title>
 
   <!-- Google Fonts: Montserrat for a bold, industrial look -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -38,21 +38,12 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.25);
     }
 
-    .navbar-em .brand-name {
-      color: #fff;
-      font-size: 1.2rem;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      line-height: 1;
-    }
-
-    .navbar-em .brand-sub {
-      color: rgba(255,255,255,0.75);
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+    .navbar-em .brand-logo {
+      height: 44px;
+      width: auto;
+      display: block;
+      /* invert to white so the dark logo reads on the red header */
+      filter: brightness(0) invert(1);
     }
 
     .navbar-em .divider {
@@ -298,6 +289,185 @@
 
     .btn-em:hover  { background-color: #b82522; }
     .btn-em:active { transform: scale(0.97); }
+
+    /* ── Compare Button ───────────────────────────────────────────── */
+    .btn-compare {
+      background-color: transparent;
+      color: #a41f35;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      border: 2px solid #a41f35;
+      border-radius: 4px;
+      padding: 0.45rem 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+      height: fit-content;
+    }
+
+    .btn-compare:hover:not(:disabled) { background-color: #a41f35; color: #fff; }
+    .btn-compare:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    /* ── Compare Chips Bar ────────────────────────────────────────── */
+    .compare-bar-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .compare-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #a41f35;
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 0.3rem 0.6rem 0.3rem 0.9rem;
+      border-radius: 2rem;
+    }
+
+    .compare-chip .chip-remove {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.75);
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .compare-chip .chip-remove:hover { color: #fff; }
+
+    /* ── Compare Section ──────────────────────────────────────────── */
+    /* ── Compare Grid: equal-width columns, horizontal scroll if needed ── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    /* When 4+ models are added, keep each card at least 260px and scroll */
+    @media (min-width: 0px) {
+      .compare-grid.many {
+        grid-template-columns: repeat(var(--cmc-count, 2), minmax(260px, 1fr));
+        overflow-x: auto;
+      }
+    }
+
+    .compare-model-card {
+      border: 1px solid #e0e0e0;
+      border-top: 4px solid #a41f35;
+      border-radius: 4px;
+      background: #fff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cmc-header {
+      background: #a41f35;
+      color: #fff;
+      padding: 0.65rem 1rem;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .cmc-image-wrap {
+      background: #fafafa;
+      border-bottom: 1px solid #f0f0f0;
+      padding: 0.75rem;
+      text-align: center;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cmc-image-wrap img {
+      max-width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+      border-radius: 3px;
+    }
+
+    .cmc-image-wrap .cmc-no-img {
+      color: #ccc;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .cmc-stats {
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      background: #fefefe;
+    }
+
+    .cmc-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.2rem 0;
+      border-bottom: 1px dotted #f0f0f0;
+    }
+
+    .cmc-stat:last-child { border-bottom: none; }
+
+    .cmc-stat-label {
+      color: #888;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .cmc-stat-value {
+      color: #FFB81C;
+      font-weight: 800;
+      font-size: 0.82rem;
+    }
+
+    .cmc-table {
+      font-size: 0.8rem;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .cmc-table th {
+      background: #222;
+      color: #fff;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      padding: 0.5rem 0.85rem;
+      border: none;
+      white-space: nowrap;
+    }
+
+    .cmc-table td {
+      padding: 0.45rem 0.85rem;
+      border-bottom: 1px solid #f0f0f0;
+      vertical-align: middle;
+    }
+
+    .cmc-table tr:last-child td { border-bottom: none; }
+    .cmc-table tbody tr:nth-child(even) { background: #fafafa; }
+    .cmc-table tbody tr:hover { background: #fef0ef; }
   </style>
 </head>
 
@@ -305,28 +475,38 @@
 
   <!-- ── Navigation Bar ──────────────────────────────────────────── -->
   <nav class="navbar-em">
-    <div>
-      <div class="brand-name">Electro-Mech</div>
-      <div class="brand-sub">Scoreboard Co.</div>
-    </div>
+    <img src="{{ url_for('static', filename='em-logo.png') }}"
+         alt="Electro-Mech Scoreboard Company"
+         class="brand-logo" />
     <div class="divider"></div>
-    <div class="page-title">Scoreboard Configuration Dashboard</div>
+    <div class="page-title">DIGITS PER MODEL</div>
   </nav>
 
   <!-- ── Main Dashboard ─────────────────────────────────────────── -->
   <div class="dashboard-wrapper">
 
-    <!-- Search / Model Selector -->
-    <div class="search-wrapper" style="position: relative;">
-      <label for="model-search">Select a Scoreboard Model</label>
-      <input
-        type="text"
-        id="model-search"
-        placeholder="Type to search models…"
-        autocomplete="off"
-      />
-      <!-- Filtered list rendered dynamically by JavaScript -->
-      <ul id="model-dropdown"></ul>
+    <!-- Search / Model Selector + Compare Button -->
+    <div style="display:flex; align-items:flex-end; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.25rem;">
+      <div class="search-wrapper" style="position:relative; margin-bottom:0;">
+        <label for="model-search">Select a Scoreboard Model</label>
+        <input
+          type="text"
+          id="model-search"
+          placeholder="Type to search models…"
+          autocomplete="off"
+        />
+        <!-- Filtered list rendered dynamically by JavaScript -->
+        <ul id="model-dropdown"></ul>
+      </div>
+      <button id="add-compare-btn" class="btn-compare" disabled title="Select a model first">
+        + Add to Compare
+      </button>
+    </div>
+
+    <!-- Compare: Chips showing currently-compared models -->
+    <div id="compare-bar" style="display:none; margin-bottom:1.5rem;">
+      <div class="compare-bar-label">Comparing</div>
+      <div id="compare-chips" style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center;"></div>
     </div>
 
     <!-- Two-column layout: Image card (left) + Data table (right) -->
@@ -404,6 +584,21 @@
       </div>
 
     </div><!-- /row -->
+
+    <!-- Compare: Side-by-Side Results Section -->
+    <div id="compare-section" style="display:none; margin-top:2rem;">
+      <div class="em-card">
+        <div class="card-header-em" style="display:flex; align-items:center; justify-content:space-between;">
+          <div>
+            <div class="card-title">Model Comparison</div>
+            <div id="compare-count" style="font-size:0.75rem; color:#aaa; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-top:0.1rem;"></div>
+          </div>
+          <button class="btn-compare" onclick="clearCompare()" style="font-size:0.72rem; padding:0.35rem 0.85rem;">Clear All</button>
+        </div>
+        <div id="compare-content" style="padding:1.25rem; overflow-x:auto;"></div>
+      </div>
+    </div>
+
   </div><!-- /dashboard-wrapper -->
 
   <!-- Bootstrap 5 JS bundle (includes Popper) -->
@@ -434,6 +629,16 @@
     const panelRowsValue   = document.getElementById('panel-rows-value');
     const etnCountBadge    = document.getElementById('etn-count-badge');
     const etnCountValue    = document.getElementById('etn-count-value');
+    const addCompareBtn    = document.getElementById('add-compare-btn');
+    const compareBar       = document.getElementById('compare-bar');
+    const compareChips     = document.getElementById('compare-chips');
+    const compareSection   = document.getElementById('compare-section');
+    const compareContent   = document.getElementById('compare-content');
+    const compareCount     = document.getElementById('compare-count');
+
+    // ── Compare State ─────────────────────────────────────────────
+    let compareList  = [];   // array of model name strings
+    let currentModel = null; // the model currently loaded in the single-view
 
     // ── Searchable Dropdown ───────────────────────────────────────
 
@@ -484,6 +689,8 @@
 
     // Called when a model is chosen from the dropdown.
     function selectModel(modelName) {
+      currentModel = modelName;
+
       // Update the search box to show the selected model name.
       searchInput.value = modelName;
       dropdown.style.display = 'none';
@@ -503,6 +710,9 @@
 
       // Fetch PCB/LED data for this model from the Flask API.
       loadTableData(modelName);
+
+      // Update the Add to Compare button state.
+      updateAddBtn();
     }
 
     // ── Image Handling ────────────────────────────────────────────
@@ -630,6 +840,138 @@
           etnCountBadge.style.display    = 'none';
           etnCountValue.textContent      = '—';
           console.error('API error:', err);
+        });
+    }
+
+    // ── Compare: Button Wiring ─────────────────────────────────────
+    addCompareBtn.addEventListener('click', () => addToCompare(currentModel));
+
+    // ── Compare: State Management ──────────────────────────────────
+
+    function updateAddBtn() {
+      if (!currentModel) {
+        addCompareBtn.disabled = true;
+        addCompareBtn.title = 'Select a model first';
+      } else if (compareList.includes(currentModel)) {
+        addCompareBtn.disabled = true;
+        addCompareBtn.title = 'Already in compare list';
+      } else {
+        addCompareBtn.disabled = false;
+        addCompareBtn.title = '';
+      }
+    }
+
+    function addToCompare(modelName) {
+      if (!modelName || compareList.includes(modelName)) return;
+      compareList.push(modelName);
+      renderCompareChips();
+      renderComparison();
+      updateAddBtn();
+    }
+
+    function removeFromCompare(modelName) {
+      compareList = compareList.filter(m => m !== modelName);
+      renderCompareChips();
+      if (compareList.length === 0) {
+        compareBar.style.display     = 'none';
+        compareSection.style.display = 'none';
+      } else {
+        renderComparison();
+      }
+      updateAddBtn();
+    }
+
+    function clearCompare() {
+      compareList = [];
+      compareBar.style.display     = 'none';
+      compareSection.style.display = 'none';
+      updateAddBtn();
+    }
+
+    // ── Compare: Chip Rendering ────────────────────────────────────
+
+    function renderCompareChips() {
+      if (compareList.length === 0) {
+        compareBar.style.display = 'none';
+        return;
+      }
+      compareBar.style.display = 'block';
+      compareChips.innerHTML = compareList.map(m =>
+        `<span class="compare-chip">
+           ${m}
+           <button class="chip-remove" onclick="removeFromCompare('${m}')" title="Remove">&times;</button>
+         </span>`
+      ).join('');
+    }
+
+    // ── Compare: Fetch & Render Comparison Section ─────────────────
+
+    function renderComparison() {
+      if (compareList.length === 0) {
+        compareSection.style.display = 'none';
+        return;
+      }
+
+      compareSection.style.display = 'block';
+      compareCount.textContent = `${compareList.length} model${compareList.length > 1 ? 's' : ''} selected`;
+      compareContent.innerHTML = '<div style="color:#888;font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Loading…</div>';
+
+      const url = `/api/compare?models=${compareList.map(m => encodeURIComponent(m)).join(',')}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          const excluded = new Set(['MatrixSize', 'ETNcount', 'PanelRows', 'model', '']);
+
+          const cards = compareList.map(modelName => {
+            const rows = data[modelName] || [];
+            if (rows.length === 0) {
+              return `<div class="compare-model-card">
+                        <div class="cmc-header">${modelName}</div>
+                        <div style="padding:1rem;color:#aaa;font-size:0.8rem;font-weight:600;">No data found</div>
+                      </div>`;
+            }
+
+            const matrixSize = rows.find(r => r.MatrixSize)?.MatrixSize || '—';
+            const panelRows  = rows.find(r => r.PanelRows)?.PanelRows   || '—';
+            const etnCount   = rows.find(r => r.ETNcount)?.ETNcount      || '—';
+            const cols       = Object.keys(rows[0]).filter(c => !excluded.has(c));
+
+            const thead = `<tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr>`;
+            const tbody = rows.map(row =>
+              `<tr>${cols.map(c => `<td>${row[c] ?? '—'}</td>`).join('')}</tr>`
+            ).join('');
+
+            return `<div class="compare-model-card">
+                      <div class="cmc-header">${modelName}</div>
+                      <div class="cmc-image-wrap">
+                        <img
+                          src="https://assets.electro-mech.com/images/scoreboard-images/${modelName.toLowerCase()}.png"
+                          alt="${modelName}"
+                          onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
+                        />
+                        <div class="cmc-no-img" style="display:none;">No image available</div>
+                      </div>
+                      <div class="cmc-stats">
+                        <div class="cmc-stat"><span class="cmc-stat-label">Matrix Size</span><span class="cmc-stat-value">${matrixSize}</span></div>
+                        <div class="cmc-stat"><span class="cmc-stat-label">Panel Rows</span><span class="cmc-stat-value">${panelRows}</span></div>
+                        <div class="cmc-stat"><span class="cmc-stat-label">ETN Boards</span><span class="cmc-stat-value">${etnCount}</span></div>
+                      </div>
+                      <div style="overflow-x:auto;">
+                        <table class="cmc-table"><thead>${thead}</thead><tbody>${tbody}</tbody></table>
+                      </div>
+                    </div>`;
+          }).join('');
+
+          const gridClass = compareList.length > 3 ? 'compare-grid many' : 'compare-grid';
+          const gridStyle = compareList.length > 3
+            ? `style="--cmc-count:${compareList.length}; overflow-x:auto;"`
+            : '';
+          compareContent.innerHTML = `<div class="${gridClass}" ${gridStyle}>${cards}</div>`;
+        })
+        .catch(err => {
+          compareContent.innerHTML = '<div style="color:#c00;font-size:0.8rem;font-weight:600;">Error loading comparison data.</div>';
+          console.error('Compare API error:', err);
         });
     }
   </script>
